@@ -1,0 +1,14 @@
+# Official AdaMEM code clone (has its own .git; see reference/AdaMEM-official)
+reference/AdaMEM-official/
+
+# Extracted paper text (intermediate artifact; the PDF is the source of truth)
+reference/paper_full.txt
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Experiment outputs (logs, indexes, trajectories) — keep recipes, not data
+experiments/*/logs/
+experiments/*/retrieval_data/
+*.log

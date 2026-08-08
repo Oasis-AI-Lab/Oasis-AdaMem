@@ -1,0 +1,80 @@
+diff --git a/examples/prompt_agent/gpt4o_alfworld.py b/examples/prompt_agent/gpt4o_alfworld.py
+index b7a52db..03c7658 100644
+--- a/examples/prompt_agent/gpt4o_alfworld.py
++++ b/examples/prompt_agent/gpt4o_alfworld.py
+@@ -252,7 +252,7 @@ class Agent:
+             
+             # Create persistent clients for each IP
+             self.clients = {
+-                ip: AsyncOpenAI(api_key=self.api_key, base_url=f"http://{ip}/v1")
++                ip: AsyncOpenAI(api_key=self.api_key, base_url=f"{ip}/v1" if "://" in ip else f"http://{ip}/v1")
+                 for ip in self.ip_addrs
+             }
+ 
+@@ -275,7 +275,7 @@ class Agent:
+             
+             # Create persistent clients for strategy model
+             self.strategy_clients = {
+-                ip: AsyncOpenAI(api_key=self.api_key, base_url=f"http://{ip}/v1")
++                ip: AsyncOpenAI(api_key=self.api_key, base_url=f"{ip}/v1" if "://" in ip else f"http://{ip}/v1")
+                 for ip in self.strategy_ip_addrs
+             }
+ 
+@@ -509,7 +509,7 @@ class Agent:
+                     model=self.model_name,
+                     messages=[{"role": "user", "content": obs}],
+                     temperature=self.temperature,
+-                    extra_body={"min_tokens": 128}, 
++                    extra_body=(None if os.environ.get("EXTRA_MIN_TOKENS", "1") == "0" else {"min_tokens": 128}), 
+                     max_tokens=self.max_tokens,
+                 )
+             except Exception as e:
+@@ -553,7 +553,7 @@ class Agent:
+                     model=self.strategy_model_name,
+                     messages=[{"role": "user", "content": obs}],
+                     temperature=self.temperature,
+-                    extra_body={"min_tokens": 128}, 
++                    extra_body=(None if os.environ.get("EXTRA_MIN_TOKENS", "1") == "0" else {"min_tokens": 128}), 
+                     max_tokens=self.strategy_max_tokens,
+                 )
+             except Exception as e:
+diff --git a/examples/prompt_agent/gpt4o_webshop.py b/examples/prompt_agent/gpt4o_webshop.py
+index 73a52a8..96981a7 100644
+--- a/examples/prompt_agent/gpt4o_webshop.py
++++ b/examples/prompt_agent/gpt4o_webshop.py
+@@ -262,7 +262,7 @@ class Agent:
+             
+             # Create persistent clients for each IP
+             self.clients = {
+-                ip: AsyncOpenAI(api_key=self.api_key, base_url=f"http://{ip}/v1")
++                ip: AsyncOpenAI(api_key=self.api_key, base_url=f"{ip}/v1" if "://" in ip else f"http://{ip}/v1")
+                 for ip in self.ip_addrs
+             }
+ 
+@@ -284,7 +284,7 @@ class Agent:
+             
+             # Create persistent clients for strategy model
+             self.strategy_clients = {
+-                ip: AsyncOpenAI(api_key=self.api_key, base_url=f"http://{ip}/v1")
++                ip: AsyncOpenAI(api_key=self.api_key, base_url=f"{ip}/v1" if "://" in ip else f"http://{ip}/v1")
+                 for ip in self.strategy_ip_addrs
+             }
+ 
+@@ -483,7 +483,7 @@ class Agent:
+                 model=self.model_name,
+                 messages=[{"role": "user", "content": obs}],
+                 temperature=self.temperature,
+-                extra_body={"min_tokens": 128}, 
++                extra_body=(None if os.environ.get("EXTRA_MIN_TOKENS", "1") == "0" else {"min_tokens": 128}), 
+                 max_tokens=self.max_tokens,
+             )
+             # Note: vLLM may not provide usage info, so we skip cost tracking for vLLM
+@@ -515,7 +515,7 @@ class Agent:
+                 model=self.strategy_model_name,
+                 messages=[{"role": "user", "content": obs}],
+                 temperature=self.temperature,
+-                extra_body={"min_tokens": 128}, 
++                extra_body=(None if os.environ.get("EXTRA_MIN_TOKENS", "1") == "0" else {"min_tokens": 128}), 
+                 max_tokens=self.strategy_max_tokens,
+             )
+             # Note: vLLM may not provide usage info, so we skip cost tracking for vLLM
